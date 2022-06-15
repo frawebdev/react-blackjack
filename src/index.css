@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Fascinate&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1, h2, h3, h4, p, button {
+  font-family: 'Fascinate', cursive;
 }
+
+button {
+  background-color: #DCC48E;
+  font-size: 2rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+}
+
