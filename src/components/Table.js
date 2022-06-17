@@ -20,7 +20,7 @@ export default function Table() {
     const [gameState, setGameState] = useState({ state: 'start', player: 0, dealer: 0, winner: '' })
     const [flipped, setFlipped] = useState(false)
 
-    const { money, changeAmount } = useContext(DealContext)
+    const { moneyAmount, setMoneyAmount } = useContext(DealContext)
 
     const deal = () => {
         hit()
@@ -75,7 +75,6 @@ export default function Table() {
                 dealer: dealerSum,
                 winner: 'player'
             })
-            changeAmount(money + 1)
         }
         else if(
             (dealerSum > playerSum)
@@ -158,11 +157,11 @@ export default function Table() {
             </div>
         </div>
         <footer className='game__table__footer'>
-            <div>{ money }</div>
+            <div>{ moneyAmount }</div>
             <button className='game__table__footer__btn game__table__footer__btn--hit' onClick={hit}>Hit</button>
             <button className='game__table__footer__btn game__table__footer__btn--stand' onClick={stand}>Stand</button>
             </footer>
-        <DealModal />
+        {/* <DealModal /> */}
         </main>
     )
 }
