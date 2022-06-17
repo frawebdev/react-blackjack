@@ -3,20 +3,24 @@ import './Table.scss'
 //
 import useFetch from '../hooks/useFetch'
 import { useState, useEffect } from 'react'
+import { useContext } from 'react'
 //libs
 import axios from 'axios'
+import { DealContext } from '../context/DealContext'
 //components
 import DealerDeck from './DealerDeck'
 import PlayerDeck from './PlayerDeck'
+import DealModal from './DealModal'
 
 export default function Table() {
     const deck = useFetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6')
     const [player, setPlayer] = useState([])
     const [dealer, setDealer] = useState([])
-    const [money, setMoney] = useState(100)
     const [moneyDealt, setmoneyDealt] = useState(0)
     const [gameState, setGameState] = useState({ state: 'start', player: 0, dealer: 0, winner: '' })
     const [flipped, setFlipped] = useState(false)
+
+    const { money, changeAmount } = useContext(DealContext)
 
     const deal = () => {
         hit()
@@ -71,6 +75,7 @@ export default function Table() {
                 dealer: dealerSum,
                 winner: 'player'
             })
+            changeAmount(money + 1)
         }
         else if(
             (dealerSum > playerSum)
@@ -84,6 +89,10 @@ export default function Table() {
                 winner: 'dealer'
             })
         }
+    }
+
+    const handleDeal = (add) => {
+        
     }
 
     useEffect(() => {
@@ -147,24 +156,13 @@ export default function Table() {
                 <DealerDeck deck={dealer}/>
                 <PlayerDeck deck={player}/>
             </div>
-            <div className='game__table__sidebar'>
-                <div className='game__table__sidebar__result'>
-                    Result
-                </div>
-                <div className='game__table__sidebar__deal'>
-                    <div className='game__table__sidebar__deal__change'>
-                    <button className='game__table__sidebar__deal__change__btn'>+ 5$</button>
-                    <div>$100</div>
-                    <button className='game__table__sidebar__deal__change__btn'>- 5$</button>
-                    </div>
-                    <button className='game__table__sidebar__deal__btn'>Deal</button>
-                </div>
-            </div>
         </div>
         <footer className='game__table__footer'>
+            <div>{ money }</div>
             <button className='game__table__footer__btn game__table__footer__btn--hit' onClick={hit}>Hit</button>
             <button className='game__table__footer__btn game__table__footer__btn--stand' onClick={stand}>Stand</button>
             </footer>
+        <DealModal />
         </main>
     )
 }
