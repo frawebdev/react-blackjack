@@ -8,15 +8,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: fadeInBackground 0.6s;
+    transition: opacity 0.6s;
     &__container {
-        padding: 2.5rem 1.5rem;
-        width: 40%;
+        padding: 2.5rem 3.5rem;
         border-radius: 15px;
-        background-color: white;
+        background-color: rgb(244, 244, 244);
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        border: 5px solid #502419;
+        animation: slideUpModal 0.6s;
         &__make__deal {
             display: grid;
             grid-gap: 2rem 1rem;
@@ -36,4 +39,19 @@
             }
         }
     }
+}
+
+.hide-modal {
+    opacity: 0;
+    display: none;
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUpModal {
+    from { margin-top: 300px; }
+    to { margin-top: 0; }
 }

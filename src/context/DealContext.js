@@ -20,9 +20,10 @@ export function DealProvider({ children }) {
     // }
 
     const [ moneyAmount, setMoneyAmount ] = useState(100)
+    const [ currentDeal, setCurrentDeal ] = useState(0)
 
     return (
-        <DealContext.Provider value={{ moneyAmount, setMoneyAmount }}>
+        <DealContext.Provider value={{ moneyAmount, setMoneyAmount, currentDeal, setCurrentDeal }}>
             {children}
         </DealContext.Provider>
     )

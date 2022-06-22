@@ -35,6 +35,6 @@
 }
 
 @keyframes dealingDealer {
-    from { bottom: 200px; }
-    to { bottom: 0px; }
+    from { bottom: 200px; opacity: 0; }
+    to { bottom: 0px; opacity: 1; }
 }

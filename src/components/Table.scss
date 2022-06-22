@@ -16,6 +16,12 @@
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
+        &__total {
+            flex-grow: 1;
+            font-size: 3rem;
+            margin-left: 1rem;
+            color: white;
+        }
         &__btn {
             margin-right: 1.5rem;
         }

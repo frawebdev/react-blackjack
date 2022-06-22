@@ -11,26 +11,17 @@ import { DealContext } from '../context/DealContext'
 import DealerDeck from './DealerDeck'
 import PlayerDeck from './PlayerDeck'
 import DealModal from './DealModal'
+import ResultModal from './ResultModal'
 
 export default function Table() {
     const deck = useFetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6')
     const [player, setPlayer] = useState([])
     const [dealer, setDealer] = useState([])
-    const [moneyDealt, setmoneyDealt] = useState(0)
-    const [gameState, setGameState] = useState({ state: 'start', player: 0, dealer: 0, winner: '' })
+    const [gameState, setGameState] = useState('start')
     const [flipped, setFlipped] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
-    const { moneyAmount, setMoneyAmount } = useContext(DealContext)
-
-    const deal = () => {
-        hit()
-        hit()
-
-        setGameState(prev => ({
-            ...prev,
-            state: 'dealing'
-        }))
-    }
+    const { moneyAmount, setMoneyAmount, currentDeal } = useContext(DealContext)
 
     const hit = async () => {
         const cardsHand = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.deck_id}/draw/?count=2`)
@@ -69,29 +60,22 @@ export default function Table() {
             playerSum <= 21
             ) 
             {
-            setGameState({
-                state: 'win',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'player'
-            })
+            setGameState('win')
         }
         else if(
             (dealerSum > playerSum)
             && dealerSum <= 21
             ) 
             {
-            setGameState({
-                state: 'win',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'dealer'
-            })
+            setGameState('lose')
         }
-    }
+        else if (dealerSum === playerSum) {
+            setGameState('lose')
+        }
 
-    const handleDeal = (add) => {
-        
+        setTimeout(() => {
+            setGameState('starting')
+        }, 5000)
     }
 
     useEffect(() => {
@@ -101,67 +85,69 @@ export default function Table() {
 
         if(playerSum > 21) {
             setFlipped(true)
-            setGameState({
-                state: 'bust',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'dealer'
-            })
+            setGameState('lose')
         }
         else if(dealerSum > 21) {
             setFlipped(true)
-            setGameState({
-                state: 'bust',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'player',
-            })
+            setGameState('win')
         }
         else if(playerSum === 21) {
             setFlipped(true)
-            setGameState({
-                state: 'natural',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'player',
-            })
+            setGameState('win')
         }
         else if(dealerSum === 21) {
             setFlipped(true)
-            setGameState({
-                state: 'natural',
-                player: playerSum,
-                dealer: dealerSum,
-                winner: 'dealer',
-            })
+            setGameState('lose')
         }
 
     }, [player, dealer])
 
     useEffect(() => {
 
-        console.log(gameState)
+        switch(gameState) {
+            case 'start':
+                setDealer([])
+                setPlayer([])
+                setFlipped(false)
+                setShowModal(true)
+                break;
+            case 'dealing':
+                hit()
+                hit()
+                break;
+            case 'standing':
+                stand()
+                break;
+            case 'win':
+                setMoneyAmount(moneyAmount + (currentDeal * 2))
+                break
+            case 'lose':
+                setMoneyAmount(moneyAmount - currentDeal)
+                break;
+        }
 
     }, [gameState])
-
-    useEffect(() => {
-        console.log(flipped)
-    }, [flipped])
 
     return (
         <main>
         <div className="game__table">
             <div className='game__table__main'>
-                <DealerDeck deck={dealer}/>
+                <DealerDeck deck={dealer} flipped={flipped}/>
                 <PlayerDeck deck={player}/>
             </div>
         </div>
         <footer className='game__table__footer'>
-            <div>{ moneyAmount }</div>
+            <div className='game__table__footer__total'>{ moneyAmount }</div>
             <button className='game__table__footer__btn game__table__footer__btn--hit' onClick={hit}>Hit</button>
-            <button className='game__table__footer__btn game__table__footer__btn--stand' onClick={stand}>Stand</button>
+            <button 
+            className='game__table__footer__btn game__table__footer__btn--stand' 
+            onClick={() => setGameState('standing')}
+            >
+            Stand
+            </button>
             </footer>
-        {/* <DealModal /> */}
+        <DealModal showModal={showModal} setShowModal={setShowModal} setGameState={setGameState}/>
+        <ResultModal gameState={gameState} setGameState={setGameState}/>
         </main>
     )
 }

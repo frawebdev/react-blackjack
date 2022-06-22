@@ -16,6 +16,6 @@
 }
 
 @keyframes dealing {
-    from { margin-top: 200px; }
-    to { margin-top: 0px; }
+    from { margin-top: 200px; opacity: 0; }
+    to { margin-top: 0px; opacity: 1; }
 }

@@ -8,8 +8,9 @@ export default function DealerDeck(props) {
         console.log(props.flipped)
      }, [props.flipped])
 
-     const isFlipped = (flip) => {
-        if(flip) {
+     const isFlipped = (flip, index) => {
+        console.log(index)
+        if(flip || index === 0) {
             return 'is-flipped'
         }
         else {
@@ -20,7 +21,7 @@ export default function DealerDeck(props) {
      return(
         <div className='game__table__dealer'>
             {props.deck.map((card, index) => (
-                <div className={`game__table__dealer__card ${isFlipped(props.flipped)}`} key={card.code}>
+                <div className={`game__table__dealer__card ${isFlipped(props.flipped, index)}`} key={card.code}>
                     <img className='game__table__dealer__card__face game__table__dealer__card__face--front' src={card.image}/>
                     <div className={`game__table__dealer__card__face game__table__dealer__card__face--back`}></div>
                 </div>
