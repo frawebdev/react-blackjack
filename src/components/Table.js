@@ -12,6 +12,7 @@ import DealerDeck from './DealerDeck'
 import PlayerDeck from './PlayerDeck'
 import DealModal from './DealModal'
 import ResultModal from './ResultModal'
+import EndModal from './EndModal'
 
 export default function Table() {
     const deck = useFetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6')
@@ -72,10 +73,9 @@ export default function Table() {
         else if (dealerSum === playerSum) {
             setGameState('lose')
         }
-
-        setTimeout(() => {
-            setGameState('starting')
-        }, 5000)
+        else if(moneyAmount <= 0) {
+            setGameState('game-over')
+        }
     }
 
     useEffect(() => {
@@ -99,8 +99,11 @@ export default function Table() {
             setFlipped(true)
             setGameState('lose')
         }
+        else if(moneyAmount <= 0) {
+            setGameState('game-over')
+        }
 
-    }, [player, dealer])
+    }, [player, dealer, moneyAmount])
 
     useEffect(() => {
 
@@ -128,6 +131,8 @@ export default function Table() {
 
     }, [gameState])
 
+
+
     return (
         <main>
         <div className="game__table">
@@ -146,8 +151,9 @@ export default function Table() {
             Stand
             </button>
             </footer>
-        <DealModal showModal={showModal} setShowModal={setShowModal} setGameState={setGameState}/>
+        <DealModal showModal={showModal} setShowModal={setShowModal} setGameState={setGameState} moneyAmount={moneyAmount}/>
         <ResultModal gameState={gameState} setGameState={setGameState}/>
+        <EndModal gameState={gameState} setGameState={setGameState} setMoneyAmount={setMoneyAmount}/>
         </main>
     )
 }

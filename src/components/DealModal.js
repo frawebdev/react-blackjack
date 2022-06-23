@@ -1,18 +1,18 @@
 //css
 import './DealModal.scss'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useContext } from 'react'
 import { DealContext } from '../context/DealContext'
 
-export default function DealModal({showModal, setShowModal, setGameState}) {
+export default function DealModal({showModal, setShowModal, gameState, setGameState, moneyAmount}) {
 
     const [handDeal, setHandDeal] = useState(0)
 
     const { currentDeal, setCurrentDeal } = useContext(DealContext)
 
     const setDeal = (oper) => {
-        if(oper === 'add') {
+        if(oper === 'add' && handDeal < moneyAmount) {
             setHandDeal(handDeal + 5)
         }
         else if(oper === 'sub' && handDeal >= 5) {
@@ -21,7 +21,7 @@ export default function DealModal({showModal, setShowModal, setGameState}) {
     }
 
     const showHideModal = (item) => {
-        if(item) {
+        if(item && moneyAmount > 0) {
             return ''
         }
         else {
@@ -36,6 +36,12 @@ export default function DealModal({showModal, setShowModal, setGameState}) {
             setGameState('dealing')
         }
     }
+
+    useEffect(() => {
+
+        setHandDeal(0)
+
+    }, [ showModal ])
 
     return (
         <div className={`deal__modal ${showHideModal(showModal)}`}>

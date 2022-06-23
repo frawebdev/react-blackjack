@@ -21,8 +21,9 @@
             height: 100%;
             backface-visibility: hidden;
             &--back {
-                background-color: red;
+                background-color: #F44E3F;
                 border-radius: 10px;
+                border: 1px solid white;
             }
             &--front {
                 transform: rotateY(180deg);

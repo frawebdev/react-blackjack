@@ -9,7 +9,7 @@ import { DealContext } from '../context/DealContext'
 
 export default function ResultModal({ gameState, setGameState }) {
 
-    const { currentDeal } = useContext(DealContext)
+    const { currentDeal, setCurrentDeal } = useContext(DealContext)
 
     const [resultText, setResultText] = useState('')
     const [resultTextColor, setResultTextColor] = useState('')
